@@ -1,12 +1,20 @@
 import type { NextConfig } from "next";
 
+/**
+ * Static export untuk GitHub Pages.
+ * NEXT_PUBLIC_BASE_PATH: kosong di lokal, "/nama-repo" saat deploy.
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH?.replace(/\/$/, "") || "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
-  experimental: {
-    agentFeedback: true,
+  output: "export",
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
   },
-  cacheComponents: true,
-  partialPrefetching: true,
+  basePath: basePath || undefined,
+  assetPrefix: basePath || undefined,
+  // Static export tidak mendukung Cache Components / partial prefetching server-side
   turbopack: {
     rules: {
       "*.css": {
