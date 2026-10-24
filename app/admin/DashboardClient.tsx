@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AdminPage } from "@/components/admin/AdminPage";
 import { Button } from "@/components/ui/Button";
 import { PageSkeleton } from "@/components/ui/Skeleton";
+import { useT } from "@/hooks/useT";
 import {
   messagesRepo,
   projectsRepo,
@@ -24,6 +25,7 @@ type Stats = {
 
 export function DashboardClient() {
   const push = useToastStore((s) => s.push);
+  const { t } = useT();
   const [stats, setStats] = useState<Stats | null>(null);
   const [resetting, setResetting] = useState(false);
 
@@ -48,18 +50,14 @@ export function DashboardClient() {
   }, [load]);
 
   async function onReset() {
-    if (
-      !window.confirm(
-        "Reset semua data demo ke seed awal? File IndexedDB juga dihapus.",
-      )
-    ) {
+    if (!window.confirm(t("admin.dash.confirmReset"))) {
       return;
     }
     setResetting(true);
     try {
       await resetDemoData();
       await load();
-      push("Demo data di-reset", "success");
+      push(t("admin.dash.toastReset"), "success");
     } finally {
       setResetting(false);
     }
@@ -67,24 +65,44 @@ export function DashboardClient() {
 
   if (!stats) {
     return (
-      <AdminPage title="Dashboard">
+      <AdminPage title={t("admin.dash.title")}>
         <PageSkeleton />
       </AdminPage>
     );
   }
 
   const cards = [
-    { label: "Proyek", value: stats.projects, href: "/admin/projects/" },
-    { label: "Published", value: stats.published, href: "/admin/projects/" },
-    { label: "Draft", value: stats.draft, href: "/admin/projects/" },
-    { label: "Pesan unread", value: stats.unread, href: "/admin/messages/" },
-    { label: "Yearly proofs", value: stats.yearly, href: "/admin/yearly-proofs/" },
+    {
+      label: t("admin.dash.statProjects"),
+      value: stats.projects,
+      href: "/admin/projects/",
+    },
+    {
+      label: t("admin.dash.statPublished"),
+      value: stats.published,
+      href: "/admin/projects/",
+    },
+    {
+      label: t("admin.dash.statDraft"),
+      value: stats.draft,
+      href: "/admin/projects/",
+    },
+    {
+      label: t("admin.dash.statUnread"),
+      value: stats.unread,
+      href: "/admin/messages/",
+    },
+    {
+      label: t("admin.dash.statYearly"),
+      value: stats.yearly,
+      href: "/admin/yearly-proofs/",
+    },
   ];
 
   return (
     <AdminPage
-      title="Dashboard"
-      description="Ringkasan data lokal di browser Anda."
+      title={t("admin.dash.title")}
+      description={t("admin.dash.desc")}
       actions={
         <Button
           type="button"
@@ -93,7 +111,7 @@ export function DashboardClient() {
           disabled={resetting}
           onClick={() => void onReset()}
         >
-          {resetting ? "Meriset…" : "Reset Demo Data"}
+          {resetting ? t("admin.dash.resetting") : t("admin.dash.reset")}
         </Button>
       }
     >

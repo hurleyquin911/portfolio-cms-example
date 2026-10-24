@@ -18,10 +18,7 @@ export function ProjectCard({
   const cover = getCoverImage(project.images);
 
   return (
-    <article
-      data-cursor="view"
-      className={cn("group relative h-full cursor-pointer", className)}
-    >
+    <article className={cn("group relative h-full", className)}>
       <Link
         href={`/projects/detail/?slug=${encodeURIComponent(project.slug)}`}
         className="flex h-full flex-col focus-visible:outline-none"

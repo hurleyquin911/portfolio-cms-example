@@ -42,7 +42,7 @@ export function TagInput({
             type="button"
             onClick={() => remove(tag)}
             className="inline-flex items-center gap-1 rounded-[var(--radius-md)] border border-border bg-surface-2 px-2 py-1 text-xs"
-            aria-label={`Hapus tag ${tag}`}
+            aria-label={`Remove tag ${tag}`}
           >
             {tag} <span aria-hidden>×</span>
           </button>
@@ -60,7 +60,7 @@ export function TagInput({
             remove(value[value.length - 1]);
           }
         }}
-        placeholder="Tambah tag lalu Enter"
+        placeholder="Add a tag, then press Enter"
         className="mt-2 w-full rounded-[var(--radius-md)] border border-border bg-background px-3 py-2 text-sm"
       />
       {filtered.length > 0 ? (

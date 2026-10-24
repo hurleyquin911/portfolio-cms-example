@@ -39,9 +39,9 @@ export function EditYearlyProofClient() {
 
   if (!item) {
     return (
-      <AdminPage title="Tidak ditemukan">
+      <AdminPage title="Not found">
         <a href="/admin/yearly-proofs/" className="text-sm underline">
-          Kembali
+          Back
         </a>
       </AdminPage>
     );

@@ -5,7 +5,7 @@ import { LoginForm } from "./LoginForm";
 
 export const metadata: Metadata = {
   title: "Admin Login",
-  description: "Login demo untuk panel admin.",
+  description: "Demo login for the admin panel.",
 };
 
 export default function AdminLoginPage() {

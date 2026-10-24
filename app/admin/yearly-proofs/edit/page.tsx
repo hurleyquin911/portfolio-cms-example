@@ -10,7 +10,7 @@ export default function AdminEditYearlyProofPage() {
   return (
     <Suspense
       fallback={
-        <AdminPage title="Memuat…">
+        <AdminPage title="Loading…">
           <PageSkeleton />
         </AdminPage>
       }

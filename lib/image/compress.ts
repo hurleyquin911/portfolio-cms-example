@@ -14,7 +14,7 @@ function loadImage(file: File): Promise<HTMLImageElement> {
     };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error("Gagal memuat gambar"));
+      reject(new Error("Failed to load image"));
     };
     img.src = url;
   });
@@ -28,7 +28,7 @@ function canvasToBlob(
   return new Promise((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
-        if (!blob) reject(new Error("toBlob gagal"));
+        if (!blob) reject(new Error("toBlob failed"));
         else resolve(blob);
       },
       type,
@@ -64,7 +64,7 @@ export async function processImageUpload(
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Canvas tidak tersedia");
+    if (!ctx) throw new Error("Canvas unavailable");
     ctx.drawImage(img, 0, 0, width, height);
     const blob = await canvasToBlob(canvas, "image/webp", WEBP_QUALITY);
     const record = await saveFile(

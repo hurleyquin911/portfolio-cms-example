@@ -45,7 +45,7 @@ function proofImg(
   };
 }
 
-/** 6 proyek dummy: campuran published & draft */
+/** 6 dummy projects: mix of published and draft */
 export const SEED_PROJECTS: Project[] = [
   {
     id: "proj_01",
@@ -53,8 +53,8 @@ export const SEED_PROJECTS: Project[] = [
     slug: "aurora-brand-system",
     year: 2025,
     summary:
-      "Identitas visual lengkap untuk startup climate-tech: logo, tipografi, dan pedoman aplikasi.",
-    body: "<p>Sistem merek yang dibangun dari metafora aurora — gradien lembut, tipografi editorial, dan grid yang ketat untuk konsistensi lintas media.</p><p>Deliverables mencakup logo suite, color tokens, stationery, dan UI kit ringan.</p>",
+      "A complete visual identity for a climate-tech startup: logo, typography, and application guidelines.",
+    body: "<p>A brand system built around the metaphor of the aurora: soft gradients, editorial typography, and a tight grid for consistency across media.</p><p>Deliverables include a logo suite, color tokens, stationery, and a lightweight UI kit.</p>",
     tags: ["Illustrator", "Figma", "Brand"],
     status: "published",
     images: [
@@ -70,8 +70,8 @@ export const SEED_PROJECTS: Project[] = [
     slug: "nimbus-editorial",
     year: 2025,
     summary:
-      "Tata letak majalah digital dengan tipografi berani dan fotografi atmosferik.",
-    body: "<p>Edisi khusus tentang arsitektur tropis. Layout modular, pull quotes besar, dan hierarki tipografi yang jelas untuk membaca panjang.</p>",
+      "Digital magazine layouts with bold typography and atmospheric photography.",
+    body: "<p>A special issue on tropical architecture. Modular layouts, large pull quotes, and a clear typographic hierarchy for long-form reading.</p>",
     tags: ["InDesign", "Photoshop", "Editorial"],
     status: "published",
     images: [
@@ -87,8 +87,8 @@ export const SEED_PROJECTS: Project[] = [
     slug: "kala-packaging",
     year: 2024,
     summary:
-      "Seri kemasan kopi specialty dengan ilustrasi botanical dan finishing foil.",
-    body: "<p>Tiga SKU dengan sistem warna berbeda namun tetap satu keluarga visual. Fokus pada shelf impact dan sustainability storytelling.</p>",
+      "A specialty coffee packaging series with botanical illustration and foil finishing.",
+    body: "<p>Three SKUs with distinct color systems that still feel like one visual family. Focused on shelf impact and sustainability storytelling.</p>",
     tags: ["Illustrator", "Packaging", "Print"],
     status: "published",
     images: [
@@ -103,8 +103,8 @@ export const SEED_PROJECTS: Project[] = [
     slug: "orbit-motion-specs",
     year: 2024,
     summary:
-      "Motion design system untuk product launch: timing, easing, dan micro-interactions.",
-    body: "<p>Dokumen spesifikasi gerak yang dipakai tim product & engineering agar animasi konsisten di web dan mobile.</p>",
+      "A motion design system for a product launch: timing, easing, and micro-interactions.",
+    body: "<p>Motion specifications used by product and engineering teams so animation stays consistent across web and mobile.</p>",
     tags: ["After Effects", "Figma", "Motion"],
     status: "published",
     images: [
@@ -118,8 +118,8 @@ export const SEED_PROJECTS: Project[] = [
     title: "Harbor Wayfinding",
     slug: "harbor-wayfinding",
     year: 2026,
-    summary: "Sistem wayfinding untuk ruang budaya tepi laut — masih dalam draft.",
-    body: "<p>Eksplorasi piktogram dan tipografi jarak jauh untuk area outdoor & indoor.</p>",
+    summary: "A wayfinding system for a waterfront cultural space (still in draft).",
+    body: "<p>Exploring pictograms and long-distance typography for outdoor and indoor areas.</p>",
     tags: ["Illustrator", "Signage"],
     status: "draft",
     images: [
@@ -133,8 +133,8 @@ export const SEED_PROJECTS: Project[] = [
     title: "Velvet Type Specimen",
     slug: "velvet-type-specimen",
     year: 2023,
-    summary: "Specimen tipografi display — draft untuk presentasi klien.",
-    body: "<p>Eksperimen ligature dan display setting untuk font custom yang sedang dikembangkan.</p>",
+    summary: "A display type specimen, drafted for a client presentation.",
+    body: "<p>Ligature and display setting experiments for a custom font still in development.</p>",
     tags: ["Typography", "InDesign"],
     status: "draft",
     images: [
@@ -145,16 +145,16 @@ export const SEED_PROJECTS: Project[] = [
   },
 ];
 
-/** 3 yearly proofs dengan PDF contoh di /public/samples */
+/** 3 yearly proofs with sample PDFs in /public/samples */
 export const SEED_YEARLY_PROOFS: YearlyProof[] = [
   {
     id: "yp_2025",
     year: 2025,
     title: "Year in Review 2025",
     digitalDescription:
-      "Fokus pada brand systems digital, motion specs, dan UI exploration untuk klien tech. Banyak eksperimen tipografi di layar dan prototipe interaktif.",
+      "Focused on digital brand systems, motion specs, and UI exploration for tech clients. Plenty of on-screen type experiments and interactive prototypes.",
     printDescription:
-      "Seri packaging dan editorial cetak: coffee line, magazine spreads, dan limited poster run untuk pameran lokal.",
+      "Packaging and print editorial series: coffee line, magazine spreads, and a limited poster run for a local exhibition.",
     images: [
       proofImg("yp25d1", "/placeholders/year-2025-digital.jpg", "Digital work 2025", "digital", 0),
       proofImg("yp25p1", "/placeholders/year-2025-print.jpg", "Print work 2025", "print", 0),
@@ -168,9 +168,9 @@ export const SEED_YEARLY_PROOFS: YearlyProof[] = [
     year: 2024,
     title: "Year in Review 2024",
     digitalDescription:
-      "Tahun eksplorasi motion dan product storytelling. Kolaborasi dengan tim engineering untuk handoff spesifikasi animasi.",
+      "A year of motion exploration and product storytelling. Collaborated with engineering on animation handoff specs.",
     printDescription:
-      "Kemasan specialty coffee dan material pameran. Eksperimen finishing foil serta kertas daur ulang.",
+      "Specialty coffee packaging and exhibition materials. Experiments with foil finishing and recycled paper.",
     images: [
       proofImg("yp24d1", "/placeholders/year-2024-digital.jpg", "Digital work 2024", "digital", 0),
       proofImg("yp24p1", "/placeholders/year-2024-print.jpg", "Print work 2024", "print", 0),
@@ -184,9 +184,9 @@ export const SEED_YEARLY_PROOFS: YearlyProof[] = [
     year: 2023,
     title: "Year in Review 2023",
     digitalDescription:
-      "Fondasi portfolio digital: landing pages, type experiments, dan identity starter kits.",
+      "Building digital portfolio foundations: landing pages, type experiments, and identity starter kits.",
     printDescription:
-      "Poster series dan type specimens cetak kecil untuk studio visits.",
+      "Poster series and small-run type specimens for studio visits.",
     images: [
       proofImg("yp23d1", "/placeholders/year-2023-digital.jpg", "Digital work 2023", "digital", 0),
       proofImg("yp23p1", "/placeholders/year-2023-print.jpg", "Print work 2023", "print", 0),
@@ -202,9 +202,9 @@ export const SEED_MESSAGES: ContactMessage[] = [
     id: "msg_01",
     name: "Rina Pramesti",
     email: "rina@studioexample.com",
-    subject: "Kolaborasi brand refresh",
+    subject: "Brand refresh collaboration",
     message:
-      "Halo! Kami tertarik membahas refresh identitas untuk brand F&B. Apakah ada slot konsultasi bulan depan?",
+      "Hi! We would love to discuss a brand refresh for our F&B label. Do you have availability for a consultation next month?",
     read: false,
     createdAt: "2026-03-01T14:22:00.000Z",
   },
@@ -212,9 +212,9 @@ export const SEED_MESSAGES: ContactMessage[] = [
     id: "msg_02",
     name: "Andi Wijaya",
     email: "andi@agencyexample.co",
-    subject: "Request portfolio PDF",
+    subject: "Request for portfolio PDF",
     message:
-      "Boleh minta yearly proof 2025 dalam bentuk PDF untuk internal review kami?",
+      "Could you share the 2025 yearly proof as a PDF for our internal review?",
     read: true,
     createdAt: "2026-02-18T09:10:00.000Z",
   },
@@ -222,12 +222,12 @@ export const SEED_MESSAGES: ContactMessage[] = [
 
 export const SEED_SETTINGS: SiteSettings = {
   heroName: "Neodeeps",
-  heroTagline: "Desain visual yang tenang, tajam, dan siap produksi.",
-  heroCtaLabel: "Lihat proyek",
+  heroTagline: "Visual design that is calm, sharp, and production-ready.",
+  heroCtaLabel: "View projects",
   aboutShort:
-    "Desainer & kreator yang mengerjakan identitas merek, editorial, dan packaging — dari konsep hingga file siap cetak.",
+    "A designer and creator working across brand identity, editorial, and packaging, from concept to print-ready files.",
   aboutLong:
-    "Saya menggabungkan pendekatan editorial dengan ketelitian sistem desain. Pekerjaan saya mencakup brand identity, layout majalah, packaging, dan motion specs yang bisa diimplementasikan tim produk. Demo ini menyimpan semua data di browser Anda (localStorage + IndexedDB) agar fitur CRUD terasa nyata tanpa backend.",
+    "I combine an editorial approach with the discipline of design systems. My work covers brand identity, magazine layouts, packaging, and motion specs that product teams can implement. This demo stores all data in your browser (localStorage and IndexedDB) so CRUD features feel real without a backend.",
   profileImagePublicSrc: "/placeholders/profile.jpg",
   skills: [
     "Brand Identity",
@@ -248,21 +248,24 @@ export const SEED_SETTINGS: SiteSettings = {
   timeline: [
     {
       id: "tl_01",
-      year: "2024 — sekarang",
+      year: "2024 - present",
       title: "Independent Designer",
-      description: "Proyek brand, packaging, dan editorial untuk klien lokal & remote.",
+      description:
+        "Brand, packaging, and editorial projects for local and remote clients.",
     },
     {
       id: "tl_02",
-      year: "2021 — 2024",
+      year: "2021 - 2024",
       title: "Studio Designer",
-      description: "Anggota tim creative studio: identity systems dan campaign visual.",
+      description:
+        "Part of a creative studio team: identity systems and campaign visuals.",
     },
     {
       id: "tl_03",
-      year: "2017 — 2021",
-      title: "Desain Komunikasi Visual",
-      description: "Studi formal dengan fokus tipografi dan desain cetak.",
+      year: "2017 - 2021",
+      title: "Visual Communication Design",
+      description:
+        "Formal study with a focus on typography and print design.",
     },
   ],
   social: {

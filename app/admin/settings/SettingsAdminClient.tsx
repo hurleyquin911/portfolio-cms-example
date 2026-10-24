@@ -58,9 +58,9 @@ export function SettingsAdminClient() {
           .filter(Boolean),
       });
       setSettings(next);
-      push("Settings disimpan", "success");
+      push("Settings saved", "success");
     } catch (err) {
-      push(err instanceof Error ? err.message : "Gagal menyimpan", "error");
+      push(err instanceof Error ? err.message : "Save failed", "error");
     } finally {
       setSaving(false);
     }
@@ -69,7 +69,7 @@ export function SettingsAdminClient() {
   async function onProfileFile(file: File | undefined) {
     if (!file) return;
     try {
-      const processed = await processImageUpload(file, "Foto profil", {
+      const processed = await processImageUpload(file, "Profile photo", {
         isCover: true,
         order: 0,
       });
@@ -81,28 +81,28 @@ export function SettingsAdminClient() {
       });
       setSettings(updated);
       push(
-        `Foto profil dikompres (${processed.originalSizeBytes} → ${processed.compressedSizeBytes} bytes)`,
+        `Profile photo compressed (${processed.originalSizeBytes} → ${processed.compressedSizeBytes} bytes)`,
         "success",
       );
     } catch (err) {
-      push(err instanceof Error ? err.message : "Upload gagal", "error");
+      push(err instanceof Error ? err.message : "Upload failed", "error");
     }
   }
 
   async function onReset() {
-    if (!window.confirm("Reset seluruh demo data?")) return;
+    if (!window.confirm("Reset all demo data?")) return;
     await resetDemoData();
     const s = await settingsRepo.get();
     setSettings(s);
     setSkillsText(s.skills.join("\n"));
     setToolsText(s.tools.join("\n"));
-    push("Demo data di-reset", "success");
+    push("Demo data reset", "success");
   }
 
   return (
     <AdminPage
       title="Site Settings"
-      description="Teks hero, about, foto, dan tautan sosial."
+      description="Hero copy, about text, photo, and social links."
       actions={
         <Button type="button" variant="secondary" size="sm" onClick={() => void onReset()}>
           Reset Demo Data
@@ -111,7 +111,7 @@ export function SettingsAdminClient() {
     >
       <form onSubmit={onSave} className="mx-auto max-w-2xl space-y-5">
         <label className="block text-sm">
-          <span className="text-muted">Nama hero</span>
+          <span className="text-muted">Hero name</span>
           <input
             className={field}
             value={settings.heroName}
@@ -127,7 +127,7 @@ export function SettingsAdminClient() {
           />
         </label>
         <label className="block text-sm">
-          <span className="text-muted">Label CTA</span>
+          <span className="text-muted">CTA label</span>
           <input
             className={field}
             value={settings.heroCtaLabel}
@@ -135,7 +135,7 @@ export function SettingsAdminClient() {
           />
         </label>
         <label className="block text-sm">
-          <span className="text-muted">About singkat</span>
+          <span className="text-muted">About (short)</span>
           <textarea
             className={field}
             rows={3}
@@ -144,7 +144,7 @@ export function SettingsAdminClient() {
           />
         </label>
         <label className="block text-sm">
-          <span className="text-muted">About panjang</span>
+          <span className="text-muted">About (long)</span>
           <textarea
             className={field}
             rows={6}
@@ -154,19 +154,19 @@ export function SettingsAdminClient() {
         </label>
 
         <div className="text-sm">
-          <span className="text-muted">Foto profil</span>
+          <span className="text-muted">Profile photo</span>
           <div className="mt-2 flex items-center gap-4">
             <div className="h-20 w-20 overflow-hidden rounded-[var(--radius-md)]">
               <ProfileImage
                 publicSrc={settings.profileImagePublicSrc}
                 fileId={settings.profileImageFileId}
-                alt="Preview profil"
+                alt="Profile preview"
                 width={80}
                 height={80}
               />
             </div>
             <label className="cursor-pointer text-sm underline">
-              Ganti foto
+              Change photo
               <input
                 type="file"
                 accept="image/*"
@@ -178,7 +178,7 @@ export function SettingsAdminClient() {
         </div>
 
         <label className="block text-sm">
-          <span className="text-muted">Skills (satu per baris)</span>
+          <span className="text-muted">Skills (one per line)</span>
           <textarea
             className={field}
             rows={5}
@@ -187,7 +187,7 @@ export function SettingsAdminClient() {
           />
         </label>
         <label className="block text-sm">
-          <span className="text-muted">Tools (satu per baris)</span>
+          <span className="text-muted">Tools (one per line)</span>
           <textarea
             className={field}
             rows={5}
@@ -198,7 +198,7 @@ export function SettingsAdminClient() {
 
         <fieldset className="space-y-3 border border-border rounded-[var(--radius-md)] p-4">
           <legend className="px-1 text-xs uppercase tracking-wider text-muted">
-            Sosial
+            Social
           </legend>
           {(
             [
@@ -226,7 +226,7 @@ export function SettingsAdminClient() {
         </fieldset>
 
         <Button type="submit" disabled={saving}>
-          {saving ? "Menyimpan…" : "Simpan settings"}
+          {saving ? "Saving…" : "Save settings"}
         </Button>
       </form>
     </AdminPage>

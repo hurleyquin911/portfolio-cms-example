@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/hooks/useT";
 import { createObjectUrl } from "@/lib/db/files";
 import { withBasePath } from "@/lib/paths";
 import type { YearlyProof } from "@/lib/types";
+
 /**
  * Viewer PDF inline (iframe) + tombol download.
- * Dynamic-ready: komponen ini cukup ringan; di Fase 4 bisa di-dynamic import.
  */
 export function PdfViewer({ proof }: { proof: YearlyProof }) {
+  const { t } = useT();
   const [src, setSrc] = useState<string | null>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("yearly-proof.pdf");
@@ -51,16 +53,15 @@ export function PdfViewer({ proof }: { proof: YearlyProof }) {
   }, [blobUrl]);
 
   if (!src) {
-    return (
-      <p className="text-sm text-muted">PDF belum tersedia untuk tahun ini.</p>
-    );
+    return <p className="text-sm text-muted">{t("yearly.pdfNone")}</p>;
   }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted">
-          Dokumen: <span className="text-foreground">{fileName}</span>
+          {t("yearly.pdfDocument")}:{" "}
+          <span className="text-foreground">{fileName}</span>
           {proof.pdf ? (
             <span className="ml-2">
               ({(proof.pdf.sizeBytes / 1024).toFixed(1)} KB)
@@ -74,20 +75,20 @@ export function PdfViewer({ proof }: { proof: YearlyProof }) {
           rel="noopener noreferrer"
           className="inline-flex h-9 items-center rounded-[var(--radius-md)] border border-border px-3 text-sm hover:bg-surface-2"
         >
-          Download PDF
+          {t("yearly.pdfDownload")}
         </a>
       </div>
       <div className="overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface">
         <iframe
-          title={`Pratinjau PDF: ${proof.title}`}
+          title={`PDF: ${proof.title}`}
           src={src}
           className="h-[70vh] w-full"
         />
       </div>
       <p className="text-xs text-muted">
-        Jika PDF tidak tampil, gunakan tombol Download di atas.{" "}
+        {t("yearly.pdfFallback")}{" "}
         <a href={src} target="_blank" rel="noopener noreferrer" className="underline">
-          Buka di tab baru
+          {t("yearly.pdfOpenTab")}
         </a>
         .
       </p>

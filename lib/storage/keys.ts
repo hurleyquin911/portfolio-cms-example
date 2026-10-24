@@ -7,9 +7,10 @@ export const STORAGE_KEYS = {
   settings: "neo.demo.settings",
   auth: "neo.demo.auth",
   theme: "neo.demo.theme",
+  locale: "neo.demo.locale",
   contactRateLimit: "neo.demo.contactRateLimit",
   preloaderSeen: "neo.demo.preloaderSeen",
 } as const;
 
 /** Bump versi ini untuk memaksa re-seed saat struktur data berubah */
-export const SEED_VERSION = "1.1.0";
+export const SEED_VERSION = "2.0.0";

@@ -1,24 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import {
+  IconArrowUpRight,
+  IconMail,
+  SOCIAL_ICON_MAP,
+} from "@/components/icons/SocialIcons";
 import { Container } from "@/components/ui/Container";
 import { useClientCollection } from "@/hooks/useClientCollection";
+import { useT } from "@/hooks/useT";
+import { cn } from "@/lib/cn";
+import type { MessageKey } from "@/lib/i18n";
+import { localizeSettings } from "@/lib/i18n/localize";
 import { settingsRepo } from "@/lib/repositories";
 import { refreshScroll } from "@/lib/scroll";
 
-const SITE_NAV = [
-  { href: "/", label: "Home" },
-  { href: "/projects/", label: "Projects" },
-  { href: "/yearly-proofs/", label: "Yearly Proofs" },
-  { href: "/about/", label: "About" },
-  { href: "/contact/", label: "Contact" },
-] as const;
+const SITE_NAV: Array<{ href: string; labelKey: MessageKey }> = [
+  { href: "/", labelKey: "nav.home" },
+  { href: "/projects/", labelKey: "nav.projects" },
+  { href: "/yearly-proofs/", labelKey: "nav.yearlyProofs" },
+  { href: "/about/", labelKey: "nav.about" },
+  { href: "/contact/", labelKey: "nav.contact" },
+];
 
 export function Footer() {
-  const { data: settings, loading } = useClientCollection(
+  const { t, locale } = useT();
+  const { data: rawSettings, loading } = useClientCollection(
     () => settingsRepo.get(),
     [],
+  );
+
+  const settings = useMemo(
+    () => (rawSettings ? localizeSettings(rawSettings, locale) : null),
+    [rawSettings, locale],
   );
 
   useEffect(() => {
@@ -27,103 +42,142 @@ export function Footer() {
 
   const social = settings?.social;
   const name = settings?.heroName ?? "Neodeeps";
-  const tagline =
-    settings?.heroTagline ??
-    "Desain visual yang tenang, tajam, dan siap produksi.";
+  const tagline = settings?.heroTagline ?? t("content.footerTagline");
   const email = social?.email ?? "hello@neodeeps.demo";
 
-  const socialLinks = [
-    social?.instagram && { href: social.instagram, label: "Instagram" },
-    social?.behance && { href: social.behance, label: "Behance" },
-    social?.dribbble && { href: social.dribbble, label: "Dribbble" },
-    social?.linkedin && { href: social.linkedin, label: "LinkedIn" },
-  ].filter(Boolean) as Array<{ href: string; label: string }>;
+  const socialLinks: Array<{
+    href: string;
+    label: keyof typeof SOCIAL_ICON_MAP;
+  }> = [];
+  if (social?.instagram)
+    socialLinks.push({ href: social.instagram, label: "Instagram" });
+  if (social?.behance)
+    socialLinks.push({ href: social.behance, label: "Behance" });
+  if (social?.dribbble)
+    socialLinks.push({ href: social.dribbble, label: "Dribbble" });
+  if (social?.linkedin)
+    socialLinks.push({ href: social.linkedin, label: "LinkedIn" });
 
   return (
-    <footer className="mt-auto border-t border-border bg-surface-2/40">
-      {/* Band besar — brand sebagai sinyal visual */}
-      <Container className="py-16 sm:py-20 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
-          <div>
+    <footer className="mt-auto border-t border-border">
+      <Container className="py-14 sm:py-16 lg:py-20">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <div className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.22em] text-muted">
-              Portfolio
+              {t("footer.portfolio")}
             </p>
-            <p className="mt-4 font-serif text-[clamp(2.75rem,8vw,5.5rem)] leading-[0.95] tracking-tight text-foreground">
+            <p className="mt-3 font-serif text-[clamp(2.5rem,7vw,4.5rem)] leading-[0.95] tracking-tight">
               {name}
             </p>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-muted">
               {tagline}
             </p>
-            <Link
-              href="/contact/"
-              className="mt-8 inline-flex h-12 items-center border-b border-foreground text-sm font-medium text-foreground transition-opacity hover:opacity-70"
-            >
-              Mulai proyek bersama →
-            </Link>
           </div>
+          <Link
+            href="/contact/"
+            className="inline-flex w-fit shrink-0 items-center gap-2 border-b border-foreground pb-1 text-sm font-medium text-foreground transition-opacity hover:opacity-70"
+          >
+            {t("footer.startProject")}
+            <IconArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </Container>
 
-          <div className="grid grid-cols-2 gap-10 sm:gap-12">
-            <nav aria-label="Navigasi situs">
+      <div className="border-t border-border">
+        <Container className="py-12 sm:py-14">
+          <div className="grid gap-10 sm:grid-cols-3 sm:gap-8">
+            <nav aria-label={t("footer.ariaSite")}>
               <p className="text-xs uppercase tracking-[0.18em] text-muted">
-                Explore
+                {t("footer.explore")}
               </p>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-5 space-y-2.5">
                 {SITE_NAV.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="font-serif text-xl text-foreground transition-colors hover:text-accent sm:text-2xl"
+                      className="text-sm text-foreground transition-colors hover:text-accent"
                     >
-                      {item.label}
+                      {t(item.labelKey)}
                     </Link>
                   </li>
                 ))}
               </ul>
             </nav>
 
-            <nav aria-label="Kontak & sosial">
+            <nav aria-label={t("footer.ariaSocial")}>
               <p className="text-xs uppercase tracking-[0.18em] text-muted">
-                Connect
+                {t("footer.connect")}
               </p>
-              <ul className="mt-5 space-y-3">
-                <li>
-                  <a
-                    href={`mailto:${email}`}
-                    className="text-sm text-foreground underline-offset-4 hover:underline"
-                  >
-                    {email}
-                  </a>
-                </li>
-                {socialLinks.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted transition-colors hover:text-foreground"
-                    >
-                      {l.label}
-                    </a>
-                  </li>
-                ))}
-                <li className="pt-2">
-                  <Link
-                    href="/admin/"
-                    className="text-xs uppercase tracking-[0.14em] text-muted hover:text-foreground"
-                  >
-                    Admin
-                  </Link>
-                </li>
+
+              <a
+                href={`mailto:${email}`}
+                className="mt-5 inline-flex items-center gap-2.5 text-sm text-foreground transition-colors hover:text-accent"
+              >
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface">
+                  <IconMail />
+                </span>
+                {email}
+              </a>
+
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {socialLinks.map((l) => {
+                  const Icon = SOCIAL_ICON_MAP[l.label];
+                  return (
+                    <li key={l.label}>
+                      <a
+                        href={l.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={l.label}
+                        title={l.label}
+                        className={cn(
+                          "inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-foreground transition-colors",
+                          "hover:border-foreground hover:bg-foreground hover:text-background",
+                        )}
+                      >
+                        <Icon />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
-          </div>
-        </div>
-      </Container>
 
-      <div className="border-t border-border">
-        <Container className="flex flex-col gap-3 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} {name}. All rights reserved.</p>
-          <p>Demo mode — data tersimpan di browser Anda.</p>
+            <div>
+              <p className="text-xs uppercase tracking-[0.18em] text-muted">
+                {t("footer.studio")}
+              </p>
+              <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
+                {t("footer.studioBlurb")}
+              </p>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      <div className="border-t border-border bg-surface-2/50">
+        <Container className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-muted">
+            © {new Date().getFullYear()} {name}
+          </p>
+          <div className="flex items-center gap-2">
+            {socialLinks.map((l) => {
+              const Icon = SOCIAL_ICON_MAP[l.label];
+              return (
+                <a
+                  key={`meta-${l.label}`}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={l.label}
+                  className="inline-flex h-8 w-8 items-center justify-center text-muted transition-colors hover:text-foreground"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              );
+            })}
+          </div>
+          <p className="text-xs text-muted">{t("common.allRights")}</p>
         </Container>
       </div>
     </footer>

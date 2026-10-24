@@ -4,11 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/hooks/useT";
 import { messagesRepo } from "@/lib/repositories";
 import { STORAGE_KEYS } from "@/lib/storage/keys";
 import { readString, writeString } from "@/lib/storage/local";
 import {
-  contactSchema,
+  createContactSchema,
   type ContactFormValues,
 } from "@/lib/validation/contact";
 import { useToastStore } from "@/store/toast";
@@ -22,6 +23,7 @@ const RATE_LIMIT_MS = 30_000;
  */
 export function ContactForm() {
   const push = useToastStore((s) => s.push);
+  const { t } = useT();
   const [success, setSuccess] = useState(false);
   const captcha = useMemo(() => {
     const a = Math.floor(Math.random() * 8) + 2;
@@ -29,13 +31,15 @@ export function ContactForm() {
     return { a, b, sum: a + b };
   }, []);
 
+  const schema = useMemo(() => createContactSchema(t), [t]);
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       email: "",
@@ -47,32 +51,22 @@ export function ContactForm() {
   });
 
   async function onSubmit(values: ContactFormValues) {
-    // Rate limit 1 submit / 30 detik
     const last = Number(readString(STORAGE_KEYS.contactRateLimit) ?? "0");
     if (Date.now() - last < RATE_LIMIT_MS) {
-      push("Tunggu 30 detik sebelum mengirim lagi.", "error");
+      push(t("contact.toast.rateLimit"), "error");
       return;
     }
 
     if (values.website) {
-      // Honeypot terisi → diam-diam "sukses" tanpa simpan
       setSuccess(true);
       return;
     }
 
     if (Number(values.captchaAnswer) !== captcha.sum) {
-      push("Jawaban captcha salah.", "error");
+      push(t("contact.toast.badCaptcha"), "error");
       return;
     }
 
-    /*
-     * === TITIK INTEGRASI EMAIL (produksi) ===
-     * Ganti pemanggilan messagesRepo.create di bawah dengan:
-     * - EmailJS: emailjs.send(...)
-     * - Formspree: fetch("https://formspree.io/f/xxx", { method:"POST", body })
-     * - Resend: API route / server action (butuh backend — tidak cocok static-only)
-     * Simpan ke messagesRepo tetap berguna sebagai inbox demo lokal.
-     */
     await messagesRepo.create({
       name: values.name,
       email: values.email,
@@ -84,7 +78,7 @@ export function ContactForm() {
     writeString(STORAGE_KEYS.contactRateLimit, String(Date.now()));
     setSuccess(true);
     reset();
-    push("Pesan tersimpan. Terima kasih!", "success");
+    push(t("contact.toast.saved"), "success");
   }
 
   if (success) {
@@ -93,13 +87,16 @@ export function ContactForm() {
         className="rounded-[var(--radius-md)] border border-border bg-surface p-8"
         role="status"
       >
-        <h2 className="font-serif text-3xl">Pesan terkirim</h2>
+        <h2 className="font-serif text-3xl">{t("contact.successTitle")}</h2>
         <p className="mt-3 text-muted leading-relaxed">
-          Terima kasih. Pesan Anda disimpan di browser (Admin → Messages). Di
-          produksi, bagian ini diganti layanan email sungguhan.
+          {t("contact.successBody")}
         </p>
-        <Button className="mt-6" variant="secondary" onClick={() => setSuccess(false)}>
-          Kirim lagi
+        <Button
+          className="mt-6"
+          variant="secondary"
+          onClick={() => setSuccess(false)}
+        >
+          {t("contact.sendAnother")}
         </Button>
       </div>
     );
@@ -111,7 +108,6 @@ export function ContactForm() {
       className="space-y-5"
       noValidate
     >
-      {/* Honeypot — tersembunyi dari pengguna */}
       <div className="absolute -left-[9999px] opacity-0" aria-hidden>
         <label>
           Website
@@ -119,14 +115,14 @@ export function ContactForm() {
         </label>
       </div>
 
-      <Field label="Nama" error={errors.name?.message}>
+      <Field label={t("contact.name")} error={errors.name?.message}>
         <input
           className={inputClass}
           autoComplete="name"
           {...register("name")}
         />
       </Field>
-      <Field label="Email" error={errors.email?.message}>
+      <Field label={t("contact.email")} error={errors.email?.message}>
         <input
           type="email"
           className={inputClass}
@@ -134,10 +130,10 @@ export function ContactForm() {
           {...register("email")}
         />
       </Field>
-      <Field label="Subjek" error={errors.subject?.message}>
+      <Field label={t("contact.subject")} error={errors.subject?.message}>
         <input className={inputClass} {...register("subject")} />
       </Field>
-      <Field label="Pesan" error={errors.message?.message}>
+      <Field label={t("contact.message")} error={errors.message?.message}>
         <textarea
           rows={6}
           className={inputClass}
@@ -145,7 +141,7 @@ export function ContactForm() {
         />
       </Field>
       <Field
-        label={`Captcha: ${captcha.a} + ${captcha.b} = ?`}
+        label={t("contact.captcha", { a: captcha.a, b: captcha.b })}
         error={errors.captchaAnswer?.message}
       >
         <input
@@ -157,7 +153,7 @@ export function ContactForm() {
       </Field>
 
       <Button type="submit" disabled={isSubmitting} className="min-w-40">
-        {isSubmitting ? "Mengirim…" : "Kirim pesan"}
+        {isSubmitting ? t("contact.sending") : t("contact.send")}
       </Button>
     </form>
   );

@@ -116,16 +116,6 @@
   }
 }
 
-/* Sembunyikan kursor sistem saat hover kartu proyek (desktop) */
-html.has-view-cursor,
-html.has-view-cursor * {
-  cursor: none !important;
-}
-
-[data-theme="dark"] .view-cursor {
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-}
-
 @layer utilities {
   .hairline {
     border: 1px solid var(--border);

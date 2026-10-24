@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import { Hero } from "@/components/home/Hero";
 import { Marquee } from "@/components/motion/Marquee";
 import { Reveal } from "@/components/motion/Reveal";
@@ -9,12 +10,20 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useClientCollection } from "@/hooks/useClientCollection";
+import { useT } from "@/hooks/useT";
+import { localizeSettings } from "@/lib/i18n/localize";
 import { settingsRepo } from "@/lib/repositories";
 
 export function HomePageClient() {
-  const { data: settings, loading } = useClientCollection(
+  const { t, locale } = useT();
+  const { data: rawSettings, loading } = useClientCollection(
     () => settingsRepo.get(),
     [],
+  );
+
+  const settings = useMemo(
+    () => (rawSettings ? localizeSettings(rawSettings, locale) : null),
+    [rawSettings, locale],
   );
 
   return (
@@ -27,20 +36,20 @@ export function HomePageClient() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-muted">
-                  Selected
+                  {t("home.selectedEyebrow")}
                 </p>
                 <h2
                   id="selected-heading"
                   className="mt-2 font-serif text-4xl sm:text-5xl"
                 >
-                  Selected Projects
+                  {t("home.selectedTitle")}
                 </h2>
               </div>
               <Link
                 href="/projects/"
                 className="text-sm text-muted underline-offset-4 hover:text-foreground hover:underline"
               >
-                Lihat semua
+                {t("home.viewAll")}
               </Link>
             </div>
           </Reveal>
@@ -63,24 +72,25 @@ export function HomePageClient() {
       <section className="py-20 sm:py-28" aria-labelledby="about-cta-heading">
         <Container className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">About</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted">
+              {t("home.aboutEyebrow")}
+            </p>
             <h2
               id="about-cta-heading"
               className="mt-2 max-w-2xl font-serif text-4xl sm:text-5xl text-balance"
             >
-              Desain yang tenang di permukaan, ketat di sistem.
+              {t("home.aboutHeadline")}
             </h2>
             <p className="mt-5 max-w-xl text-muted leading-relaxed">
-              {settings?.aboutShort ??
-                "Identitas merek, editorial, dan packaging — dari konsep hingga file siap produksi."}
+              {settings?.aboutShort ?? t("content.aboutShort")}
             </p>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="flex flex-wrap gap-3">
               <Button href="/about/" variant="secondary">
-                Tentang saya
+                {t("home.aboutCta")}
               </Button>
-              <Button href="/contact/">Mulai proyek</Button>
+              <Button href="/contact/">{t("home.startProject")}</Button>
             </div>
           </Reveal>
         </Container>

@@ -52,7 +52,7 @@ export const yearlyProofsRepo: Repository<YearlyProof> & {
   async update(id, patch) {
     const all = load();
     const idx = all.findIndex((p) => p.id === id);
-    if (idx === -1) throw new Error(`Yearly proof ${id} tidak ditemukan`);
+    if (idx === -1) throw new Error(`Yearly proof ${id} not found`);
     const updated: YearlyProof = {
       ...all[idx],
       ...patch,

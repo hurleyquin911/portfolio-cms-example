@@ -28,7 +28,7 @@ let dbPromise: Promise<IDBPDatabase<NeoDemoDB>> | null = null;
 
 export function getDb(): Promise<IDBPDatabase<NeoDemoDB>> {
   if (typeof window === "undefined") {
-    return Promise.reject(new Error("IndexedDB hanya tersedia di browser"));
+    return Promise.reject(new Error("IndexedDB is only available in the browser"));
   }
   if (!dbPromise) {
     dbPromise = openDB<NeoDemoDB>(DB_NAME, DB_VERSION, {

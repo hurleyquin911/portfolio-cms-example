@@ -27,7 +27,7 @@ export function PdfUploader({
   async function onFile(file: File | undefined) {
     if (!file) return;
     if (file.type !== "application/pdf" && !file.name.endsWith(".pdf")) {
-      push("Hanya file PDF", "error");
+      push("PDF files only", "error");
       return;
     }
     setBusy(true);
@@ -41,9 +41,9 @@ export function PdfUploader({
         },
         publicPdfPath: undefined,
       });
-      push("PDF tersimpan di IndexedDB", "success");
+      push("PDF saved to IndexedDB", "success");
     } catch (e) {
-      push(e instanceof Error ? e.message : "Upload PDF gagal", "error");
+      push(e instanceof Error ? e.message : "PDF upload failed", "error");
     } finally {
       setBusy(false);
     }
@@ -54,7 +54,7 @@ export function PdfUploader({
       await removeFile(pdf.fileId).catch(() => undefined);
     }
     onChange({ pdf: undefined, publicPdfPath: undefined });
-    push("PDF dihapus", "info");
+    push("PDF removed", "info");
   }
 
   return (
@@ -69,13 +69,13 @@ export function PdfUploader({
           Seed PDF: <code>{publicPdfPath}</code>
         </p>
       ) : (
-        <p className="text-sm text-muted">Belum ada PDF.</p>
+        <p className="text-sm text-muted">No PDF yet.</p>
       )}
 
       <div className="flex flex-wrap gap-2">
         <label className="inline-flex cursor-pointer">
           <span className="inline-flex h-9 items-center rounded-[var(--radius-md)] border border-border px-3 text-sm hover:bg-surface-2">
-            {busy ? "Mengunggah…" : pdf || publicPdfPath ? "Ganti PDF" : "Upload PDF"}
+            {busy ? "Uploading…" : pdf || publicPdfPath ? "Replace PDF" : "Upload PDF"}
           </span>
           <input
             type="file"
@@ -87,7 +87,7 @@ export function PdfUploader({
         </label>
         {(pdf || publicPdfPath) && (
           <Button type="button" variant="danger" size="sm" onClick={() => void clearPdf()}>
-            Hapus PDF
+            Delete PDF
           </Button>
         )}
       </div>

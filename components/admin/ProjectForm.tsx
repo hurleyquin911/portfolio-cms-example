@@ -68,11 +68,11 @@ export function ProjectForm({
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim() || !slug.trim()) {
-      push("Judul dan slug wajib", "error");
+      push("Title and slug are required", "error");
       return;
     }
     if (missingAlt) {
-      push("Semua gambar wajib punya alt text", "error");
+      push("Every image needs alt text", "error");
       return;
     }
     setSaving(true);
@@ -89,14 +89,14 @@ export function ProjectForm({
       };
       if (mode === "create") {
         await projectsRepo.create(payload);
-        push("Proyek dibuat", "success");
+        push("Project created", "success");
       } else if (initial) {
         await projectsRepo.update(initial.id, payload);
-        push("Proyek disimpan", "success");
+        push("Project saved", "success");
       }
       router.push("/admin/projects/");
     } catch (err) {
-      push(err instanceof Error ? err.message : "Gagal menyimpan", "error");
+      push(err instanceof Error ? err.message : "Save failed", "error");
     } finally {
       setSaving(false);
     }
@@ -105,7 +105,7 @@ export function ProjectForm({
   return (
     <form onSubmit={onSubmit} className="mx-auto max-w-3xl space-y-6">
       <label className="block text-sm">
-        <span className="text-muted">Judul</span>
+        <span className="text-muted">Title</span>
         <input
           className={field}
           value={title}
@@ -127,7 +127,7 @@ export function ProjectForm({
       </label>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm">
-          <span className="text-muted">Tahun</span>
+          <span className="text-muted">Year</span>
           <input
             type="number"
             className={field}
@@ -149,7 +149,7 @@ export function ProjectForm({
         </label>
       </div>
       <label className="block text-sm">
-        <span className="text-muted">Ringkasan</span>
+        <span className="text-muted">Summary</span>
         <textarea
           className={field}
           rows={3}
@@ -171,7 +171,7 @@ export function ProjectForm({
         </div>
       </div>
       <div className="text-sm">
-        <span className="text-muted">Gambar</span>
+        <span className="text-muted">Images</span>
         <div className="mt-2">
           <ImageUploader
             images={images}
@@ -182,10 +182,10 @@ export function ProjectForm({
       </div>
       <div className="flex flex-wrap gap-2 pt-2">
         <Button type="submit" disabled={saving}>
-          {saving ? "Menyimpan…" : "Simpan"}
+          {saving ? "Saving…" : "Save"}
         </Button>
         <Button variant="secondary" href="/admin/projects/">
-          Batal
+          Cancel
         </Button>
       </div>
     </form>

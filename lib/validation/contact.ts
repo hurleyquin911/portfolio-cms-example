@@ -1,16 +1,21 @@
 import { z } from "zod";
+import type { MessageKey } from "@/lib/i18n";
 
-export const contactSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 karakter").max(80),
-  email: z.string().email("Email tidak valid"),
-  subject: z.string().min(3, "Subjek minimal 3 karakter").max(120),
-  message: z.string().min(10, "Pesan minimal 10 karakter").max(2000),
-  /** Honeypot — harus kosong */
-  website: z.string().optional(),
-  captchaAnswer: z
-    .string()
-    .min(1, "Jawaban captcha wajib")
-    .refine((v) => !Number.isNaN(Number(v)), "Angka tidak valid"),
-});
+type Translator = (key: MessageKey) => string;
 
-export type ContactFormValues = z.infer<typeof contactSchema>;
+export function createContactSchema(t: Translator) {
+  return z.object({
+    name: z.string().min(2, t("contact.err.nameMin")).max(80),
+    email: z.string().email(t("contact.err.email")),
+    subject: z.string().min(3, t("contact.err.subjectMin")).max(120),
+    message: z.string().min(10, t("contact.err.messageMin")).max(2000),
+    /** Honeypot — harus kosong */
+    website: z.string().optional(),
+    captchaAnswer: z
+      .string()
+      .min(1, t("contact.err.captchaRequired"))
+      .refine((v) => !Number.isNaN(Number(v)), t("contact.err.invalidNumber")),
+  });
+}
+
+export type ContactFormValues = z.infer<ReturnType<typeof createContactSchema>>;

@@ -9,10 +9,16 @@ type Props = {
   href: string;
   children: React.ReactNode;
   className?: string;
+  variant?: "primary" | "secondary";
 };
 
 /** CTA dengan magnetic pull (pointer fine saja) */
-export function MagneticButton({ href, children, className }: Props) {
+export function MagneticButton({
+  href,
+  children,
+  className,
+  variant = "primary",
+}: Props) {
   const rootRef = useRef<HTMLAnchorElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
 
@@ -25,10 +31,10 @@ export function MagneticButton({ href, children, className }: Props) {
     const rect = el.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
-    gsap.to(el, { x: x * 0.25, y: y * 0.25, duration: 0.35, ease: "power2.out" });
+    gsap.to(el, { x: x * 0.22, y: y * 0.22, duration: 0.35, ease: "power2.out" });
     gsap.to(labelRef.current, {
-      x: x * 0.12,
-      y: y * 0.12,
+      x: x * 0.1,
+      y: y * 0.1,
       duration: 0.35,
       ease: "power2.out",
     });
@@ -36,8 +42,18 @@ export function MagneticButton({ href, children, className }: Props) {
 
   function onLeave() {
     registerGsap();
-    gsap.to(rootRef.current, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
-    gsap.to(labelRef.current, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
+    gsap.to(rootRef.current, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.45)",
+    });
+    gsap.to(labelRef.current, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: "elastic.out(1, 0.45)",
+    });
   }
 
   return (
@@ -47,11 +63,20 @@ export function MagneticButton({ href, children, className }: Props) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       className={cn(
-        "inline-flex h-12 items-center justify-center rounded-[var(--radius-md)] bg-accent px-6 text-sm font-medium text-accent-fg",
+        "group inline-flex h-12 items-center justify-center gap-2 rounded-[var(--radius-md)] px-5 text-sm font-medium transition-colors",
+        variant === "primary" &&
+          "bg-accent text-accent-fg hover:bg-foreground hover:text-background",
+        variant === "secondary" &&
+          "border border-border bg-transparent text-foreground hover:border-foreground hover:bg-surface-2",
         className,
       )}
     >
-      <span ref={labelRef}>{children}</span>
+      <span
+        ref={labelRef}
+        className="inline-flex items-center gap-2 whitespace-nowrap"
+      >
+        {children}
+      </span>
     </Link>
   );
 }

@@ -8,6 +8,8 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useT } from "@/hooks/useT";
+import { localizeProjects } from "@/lib/i18n/localize";
 import { getCoverImage } from "@/lib/media";
 import { projectsRepo } from "@/lib/repositories";
 import { ensureSeedData } from "@/lib/seed/bootstrap";
@@ -17,6 +19,7 @@ export function ProjectDetailClient() {
   const searchParams = useSearchParams();
   const slug = searchParams.get("slug") ?? "";
   const [all, setAll] = useState<Project[] | null>(null);
+  const { t, locale } = useT();
 
   useEffect(() => {
     ensureSeedData();
@@ -32,26 +35,36 @@ export function ProjectDetailClient() {
     };
   }, []);
 
+  const localizedAll = useMemo(
+    () => (all ? localizeProjects(all, locale) : null),
+    [all, locale],
+  );
+
   const project = useMemo(
-    () => all?.find((p) => p.slug === slug) ?? null,
-    [all, slug],
+    () => localizedAll?.find((p) => p.slug === slug) ?? null,
+    [localizedAll, slug],
   );
 
   const index = useMemo(
-    () => (project && all ? all.findIndex((p) => p.id === project.id) : -1),
-    [all, project],
+    () =>
+      project && localizedAll
+        ? localizedAll.findIndex((p) => p.id === project.id)
+        : -1,
+    [localizedAll, project],
   );
 
-  const prev = index > 0 && all ? all[index - 1] : null;
+  const prev = index > 0 && localizedAll ? localizedAll[index - 1] : null;
   const next =
-    index >= 0 && all && index < all.length - 1 ? all[index + 1] : null;
+    index >= 0 && localizedAll && index < localizedAll.length - 1
+      ? localizedAll[index + 1]
+      : null;
 
   useDocumentMeta(
     project ? `${project.title} · Neodeeps` : undefined,
     project?.summary,
   );
 
-  if (all === null) {
+  if (localizedAll === null) {
     return (
       <main className="flex-1 py-16">
         <Container>
@@ -65,12 +78,12 @@ export function ProjectDetailClient() {
     return (
       <main className="flex-1 py-16">
         <Container>
-          <h1 className="font-serif text-4xl">Proyek tidak ditemukan</h1>
+          <h1 className="font-serif text-4xl">{t("projects.notFound")}</h1>
           <Link
             href="/projects/"
             className="mt-6 inline-block text-sm underline underline-offset-4"
           >
-            Kembali ke gallery
+            {t("projects.backToGallery")}
           </Link>
         </Container>
       </main>
@@ -146,7 +159,7 @@ export function ProjectDetailClient() {
 
           <nav
             className="mt-20 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:justify-between"
-            aria-label="Navigasi proyek"
+            aria-label={t("projects.navAria")}
           >
             {prev ? (
               <Link
@@ -154,7 +167,7 @@ export function ProjectDetailClient() {
                 className="group max-w-xs"
               >
                 <span className="text-xs uppercase tracking-wider text-muted">
-                  Previous
+                  {t("projects.prev")}
                 </span>
                 <span className="mt-1 block font-serif text-2xl group-hover:underline">
                   {prev.title}
@@ -169,7 +182,7 @@ export function ProjectDetailClient() {
                 className="group max-w-xs sm:text-right"
               >
                 <span className="text-xs uppercase tracking-wider text-muted">
-                  Next
+                  {t("projects.next")}
                 </span>
                 <span className="mt-1 block font-serif text-2xl group-hover:underline">
                   {next.title}

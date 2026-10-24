@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import { DemoBadge } from "@/components/layout/DemoBadge";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SkipToContent } from "@/components/layout/SkipToContent";
@@ -40,12 +39,12 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteOrigin()),
   title: {
-    default: "Neodeeps — Portfolio Demo",
+    default: "Neodeeps · Portfolio",
     template: "%s · Neodeeps",
   },
   description:
-    "Portfolio demo desainer/kreator dengan CRUD client-side, siap di-deploy ke GitHub Pages.",
-  applicationName: "Neodeeps Portfolio Demo",
+    "A designer and creator portfolio with client-side CRUD, ready to deploy on GitHub Pages.",
+  applicationName: "Neodeeps Portfolio",
   authors: [{ name: "Neodeeps" }],
   keywords: [
     "portfolio",
@@ -53,21 +52,20 @@ export const metadata: Metadata = {
     "brand identity",
     "editorial",
     "packaging",
-    "demo",
   ],
   openGraph: {
-    title: "Neodeeps — Portfolio Demo",
+    title: "Neodeeps · Portfolio",
     description:
-      "Portfolio demo desainer/kreator dengan CRUD client-side, siap di-deploy ke GitHub Pages.",
+      "A designer and creator portfolio with client-side CRUD, ready to deploy on GitHub Pages.",
     type: "website",
-    locale: "id_ID",
+    locale: "en_US",
     siteName: "Neodeeps",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Neodeeps — Portfolio Demo",
+    title: "Neodeeps · Portfolio",
     description:
-      "Portfolio demo desainer/kreator dengan CRUD client-side, siap di-deploy ke GitHub Pages.",
+      "A designer and creator portfolio with client-side CRUD, ready to deploy on GitHub Pages.",
   },
   robots: {
     index: true,
@@ -75,12 +73,12 @@ export const metadata: Metadata = {
   },
 };
 
-const themeBootScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}})();`;
+const themeBootScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.setAttribute("data-theme","light");var l=localStorage.getItem("${STORAGE_KEYS.locale}");if(l==="en"||l==="id")document.documentElement.setAttribute("lang",l)}catch(e){document.documentElement.setAttribute("data-theme","light")}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="id"
+      lang="en"
       data-theme="light"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} antialiased`}
@@ -100,7 +98,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </div>
           <Footer />
-          <DemoBadge />
         </AppProviders>
       </body>
     </html>

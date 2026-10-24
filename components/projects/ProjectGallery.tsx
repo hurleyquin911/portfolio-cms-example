@@ -5,7 +5,9 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useClientCollection } from "@/hooks/useClientCollection";
+import { useT } from "@/hooks/useT";
 import { Flip, prefersReducedMotion, registerGsap } from "@/lib/gsap";
+import { localizeProjects } from "@/lib/i18n/localize";
 import { projectsRepo } from "@/lib/repositories";
 import type { Project } from "@/lib/types";
 import { cn } from "@/lib/cn";
@@ -15,20 +17,21 @@ export function ProjectGallery() {
   const flipStateRef = useRef<ReturnType<typeof Flip.getState> | null>(null);
   const [query, setQuery] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const { t, locale } = useT();
 
   const { data, loading } = useClientCollection(
     () => projectsRepo.getAll(),
     [],
   );
 
-  const published = useMemo(
-    () => (data ?? []).filter((p) => p.status === "published"),
-    [data],
-  );
+  const published = useMemo(() => {
+    const list = (data ?? []).filter((p) => p.status === "published");
+    return localizeProjects(list, locale);
+  }, [data, locale]);
 
   const tags = useMemo(() => {
     const set = new Set<string>();
-    published.forEach((p) => p.tags.forEach((t) => set.add(t)));
+    published.forEach((p) => p.tags.forEach((tag) => set.add(tag)));
     return [...set].sort();
   }, [published]);
 
@@ -76,27 +79,29 @@ export function ProjectGallery() {
     <div>
       <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
         <label className="block w-full max-w-sm text-sm">
-          <span className="text-muted">Cari judul</span>
+          <span className="text-muted">{t("projects.searchLabel")}</span>
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Aurora, Nimbus…"
+            placeholder={t("projects.searchPlaceholder")}
             className="mt-1 w-full rounded-[var(--radius-md)] border border-border bg-surface px-3 py-2"
           />
         </label>
         <p className="text-sm tabular-nums text-muted">
-          {filtered.length} proyek
+          {filtered.length === 1
+            ? t("projects.countOne", { n: filtered.length })
+            : t("projects.countMany", { n: filtered.length })}
         </p>
       </div>
 
       <div
         className="mt-6 flex flex-wrap gap-2"
         role="group"
-        aria-label="Filter tools"
+        aria-label={t("projects.filterAria")}
       >
         <FilterChip
-          label="Semua"
+          label={t("projects.filterAll")}
           active={activeTag === null}
           onClick={() => animateFilter(null)}
         />
@@ -113,8 +118,8 @@ export function ProjectGallery() {
       {filtered.length === 0 ? (
         <EmptyState
           className="mt-10"
-          title="Tidak ada proyek"
-          description="Coba ubah kata kunci atau filter tag."
+          title={t("projects.emptyTitle")}
+          description={t("projects.emptyDesc")}
         />
       ) : (
         <div
@@ -160,6 +165,7 @@ function FilterChip({
 
 /** Dipakai landing — grid 2×2 rapi */
 export function SelectedProjects({ limit = 4 }: { limit?: number }) {
+  const { t, locale } = useT();
   const { data, loading } = useClientCollection(
     () => projectsRepo.getAll(),
     [],
@@ -167,15 +173,16 @@ export function SelectedProjects({ limit = 4 }: { limit?: number }) {
 
   if (loading) return <PageSkeleton />;
 
-  const items = (data ?? [])
-    .filter((p: Project) => p.status === "published")
-    .slice(0, limit);
+  const items = localizeProjects(
+    (data ?? []).filter((p: Project) => p.status === "published").slice(0, limit),
+    locale,
+  );
 
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Belum ada proyek published"
-        description="Publish proyek dari Admin untuk menampilkannya di sini."
+        title={t("projects.selectedEmptyTitle")}
+        description={t("projects.selectedEmptyDesc")}
       />
     );
   }

@@ -13,7 +13,7 @@ export function ToastViewport() {
     <div
       className="fixed bottom-4 right-4 z-[80] flex w-[min(100%-2rem,22rem)] flex-col gap-2"
       role="region"
-      aria-label="Notifikasi"
+      aria-label="Notifications"
     >
       {items.map((t) => (
         <div
@@ -30,7 +30,7 @@ export function ToastViewport() {
             type="button"
             className="text-muted hover:text-foreground"
             onClick={() => dismiss(t.id)}
-            aria-label="Tutup notifikasi"
+            aria-label="Dismiss notification"
           >
             ×
           </button>

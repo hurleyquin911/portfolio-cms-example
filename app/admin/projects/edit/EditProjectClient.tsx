@@ -31,7 +31,7 @@ export function EditProjectClient() {
 
   if (project === undefined) {
     return (
-      <AdminPage title="Edit proyek">
+      <AdminPage title="Edit project">
         <PageSkeleton />
       </AdminPage>
     );
@@ -40,18 +40,18 @@ export function EditProjectClient() {
   if (!project) {
     return (
       <AdminPage
-        title="Proyek tidak ditemukan"
-        description="Periksa parameter ?id= pada URL."
+        title="Project not found"
+        description="Check the ?id= parameter in the URL."
       >
         <a href="/admin/projects/" className="text-sm underline">
-          Kembali
+          Back
         </a>
       </AdminPage>
     );
   }
 
   return (
-    <AdminPage title="Edit proyek" description={project.title}>
+    <AdminPage title="Edit project" description={project.title}>
       <ProjectForm mode="edit" initial={project} />
     </AdminPage>
   );

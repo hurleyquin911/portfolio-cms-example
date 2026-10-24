@@ -7,7 +7,7 @@ export function ConfirmDialog({
   open,
   title,
   description,
-  confirmLabel = "Hapus",
+  confirmLabel = "Delete",
   onConfirm,
   onCancel,
 }: {
@@ -72,7 +72,7 @@ export function ConfirmDialog({
             size="sm"
             onClick={onCancel}
           >
-            Batal
+            Cancel
           </Button>
           <Button type="button" variant="danger" size="sm" onClick={onConfirm}>
             {confirmLabel}

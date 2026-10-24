@@ -5,7 +5,7 @@
 
 function assertClient(): void {
   if (typeof window === "undefined") {
-    throw new Error("localStorage hanya tersedia di browser");
+    throw new Error("localStorage is only available in the browser");
   }
 }
 

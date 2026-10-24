@@ -1,26 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useClientCollection } from "@/hooks/useClientCollection";
+import { useT } from "@/hooks/useT";
+import { localizeYearlyProofs } from "@/lib/i18n/localize";
 import { yearlyProofsRepo } from "@/lib/repositories";
 
 export function YearlyProofsList() {
+  const { t, locale } = useT();
   const { data, loading } = useClientCollection(
     () => yearlyProofsRepo.getAll(),
     [],
   );
 
+  const items = useMemo(
+    () => localizeYearlyProofs(data ?? [], locale),
+    [data, locale],
+  );
+
   if (loading) return <PageSkeleton />;
 
-  const items = data ?? [];
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Belum ada yearly proof"
-        description="Tambahkan dari Admin → Yearly Proofs."
+        title={t("yearly.emptyTitle")}
+        description={t("yearly.emptyDesc")}
       />
     );
   }
@@ -32,7 +40,6 @@ export function YearlyProofsList() {
           <Link
             href={`/yearly-proofs/detail/?year=${proof.year}`}
             className="group flex flex-col gap-2 py-8 sm:flex-row sm:items-baseline sm:justify-between"
-            data-cursor="view"
           >
             <div>
               <p className="font-mono text-sm tabular-nums text-muted">
@@ -42,7 +49,7 @@ export function YearlyProofsList() {
                 {proof.title}
               </h2>
             </div>
-            <span className="text-sm text-muted">Lihat detail →</span>
+            <span className="text-sm text-muted">{t("yearly.viewDetails")} →</span>
           </Link>
         </Reveal>
       ))}

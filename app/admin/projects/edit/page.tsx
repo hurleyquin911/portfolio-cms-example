@@ -10,7 +10,7 @@ export default function AdminEditProjectPage() {
   return (
     <Suspense
       fallback={
-        <AdminPage title="Memuat…">
+        <AdminPage title="Loading…">
           <PageSkeleton />
         </AdminPage>
       }

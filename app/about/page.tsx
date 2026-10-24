@@ -3,7 +3,7 @@ import { AboutContent } from "@/components/about/AboutContent";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Tentang Neodeeps — timeline, skills, dan pendekatan desain.",
+  description: "About Neodeeps: timeline, skills, and design approach.",
 };
 
 export default function AboutPage() {

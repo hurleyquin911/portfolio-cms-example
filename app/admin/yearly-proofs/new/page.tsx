@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Admin · New Yearly Proof" };
 
 export default function AdminNewYearlyProofPage() {
   return (
-    <AdminPage title="Buat yearly proof">
+    <AdminPage title="Create yearly proof">
       <YearlyProofForm mode="create" />
     </AdminPage>
   );

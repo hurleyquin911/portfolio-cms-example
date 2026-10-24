@@ -45,9 +45,9 @@ export function ProjectsAdminClient() {
     try {
       await projectsRepo.duplicate(id);
       await load();
-      push("Proyek diduplikasi (draft)", "success");
+      push("Project duplicated (draft)", "success");
     } catch (e) {
-      push(e instanceof Error ? e.message : "Gagal duplikasi", "error");
+      push(e instanceof Error ? e.message : "Duplicate failed", "error");
     }
   }
 
@@ -56,7 +56,7 @@ export function ProjectsAdminClient() {
     await projectsRepo.remove(deleteId);
     setDeleteId(null);
     await load();
-    push("Proyek dihapus", "success");
+    push("Project deleted", "success");
   }
 
   if (!items) {
@@ -70,17 +70,17 @@ export function ProjectsAdminClient() {
   return (
     <AdminPage
       title="Projects"
-      description="CRUD proyek — hanya published yang tampil di gallery publik."
+      description="Project CRUD. Only published items appear in the public gallery."
       actions={
         <Button href="/admin/projects/new/" size="sm">
-          + Proyek baru
+          + New project
         </Button>
       }
     >
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="search"
-          placeholder="Cari judul / slug…"
+          placeholder="Search title / slug…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full max-w-sm rounded-[var(--radius-md)] border border-border bg-background px-3 py-2 text-sm"
@@ -90,7 +90,7 @@ export function ProjectsAdminClient() {
           onChange={(e) => setStatus(e.target.value as ProjectStatus | "all")}
           className="rounded-[var(--radius-md)] border border-border bg-background px-3 py-2 text-sm"
         >
-          <option value="all">Semua status</option>
+          <option value="all">All statuses</option>
           <option value="published">Published</option>
           <option value="draft">Draft</option>
         </select>
@@ -99,11 +99,11 @@ export function ProjectsAdminClient() {
       {filtered.length === 0 ? (
         <EmptyState
           className="mt-8"
-          title="Tidak ada proyek"
-          description="Buat proyek baru atau ubah filter."
+          title="No projects"
+          description="Create a new project or change the filter."
           action={
             <Button href="/admin/projects/new/" size="sm">
-              Buat proyek
+              Create project
             </Button>
           }
         />
@@ -112,10 +112,10 @@ export function ProjectsAdminClient() {
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-border text-xs uppercase tracking-wider text-muted">
               <tr>
-                <th className="py-3 pr-3 font-medium">Judul</th>
-                <th className="py-3 pr-3 font-medium">Tahun</th>
+                <th className="py-3 pr-3 font-medium">Title</th>
+                <th className="py-3 pr-3 font-medium">Year</th>
                 <th className="py-3 pr-3 font-medium">Status</th>
-                <th className="py-3 font-medium">Aksi</th>
+                <th className="py-3 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -150,14 +150,14 @@ export function ProjectsAdminClient() {
                         className="text-xs text-muted hover:text-foreground"
                         onClick={() => void onDuplicate(p.id)}
                       >
-                        Duplikat
+                        Duplicate
                       </button>
                       <button
                         type="button"
                         className="text-xs text-danger"
                         onClick={() => setDeleteId(p.id)}
                       >
-                        Hapus
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -170,8 +170,8 @@ export function ProjectsAdminClient() {
 
       <ConfirmDialog
         open={Boolean(deleteId)}
-        title="Hapus proyek?"
-        description="Tindakan ini tidak bisa dibatalkan (kecuali Reset Demo Data)."
+        title="Delete project?"
+        description="This cannot be undone (unless you use Reset Demo Data)."
         onCancel={() => setDeleteId(null)}
         onConfirm={() => void onDelete()}
       />

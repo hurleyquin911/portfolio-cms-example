@@ -47,7 +47,7 @@ export const messagesRepo: Repository<ContactMessage> & {
   async update(id, patch) {
     const all = load();
     const idx = all.findIndex((m) => m.id === id);
-    if (idx === -1) throw new Error(`Message ${id} tidak ditemukan`);
+    if (idx === -1) throw new Error(`Message ${id} not found`);
     const updated: ContactMessage = { ...all[idx], ...patch, id };
     all[idx] = updated;
     save(all);

@@ -13,7 +13,7 @@ export default function YearlyProofDetailPage() {
   return (
     <Suspense
       fallback={
-        <PhaseShell title="Memuat…">
+        <PhaseShell title="Loading…">
           <PageSkeleton />
         </PhaseShell>
       }

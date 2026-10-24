@@ -3,20 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LocaleToggle } from "@/components/layout/LocaleToggle";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { useT } from "@/hooks/useT";
 import { cn } from "@/lib/cn";
+import type { MessageKey } from "@/lib/i18n";
 
-const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/projects/", label: "Projects" },
-  { href: "/yearly-proofs/", label: "Yearly Proofs" },
-  { href: "/about/", label: "About" },
-  { href: "/contact/", label: "Contact" },
-] as const;
+const NAV: Array<{ href: string; labelKey: MessageKey }> = [
+  { href: "/", labelKey: "nav.home" },
+  { href: "/projects/", labelKey: "nav.projects" },
+  { href: "/yearly-proofs/", labelKey: "nav.yearlyProofs" },
+  { href: "/about/", labelKey: "nav.about" },
+  { href: "/contact/", labelKey: "nav.contact" },
+];
 
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { t } = useT();
 
   useEffect(() => {
     setOpen(false);
@@ -42,7 +46,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-md">
       <nav
         className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-8"
-        aria-label="Navigasi utama"
+        aria-label={t("nav.ariaMain")}
       >
         <Link
           href="/"
@@ -67,7 +71,7 @@ export function Navbar() {
                   )}
                   aria-current={active ? "page" : undefined}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               </li>
             );
@@ -75,22 +79,17 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <LocaleToggle />
           <ThemeToggle />
-          <Link
-            href="/admin/"
-            className="hidden text-xs uppercase tracking-wider text-muted hover:text-foreground sm:inline"
-          >
-            Admin
-          </Link>
           <button
             type="button"
             className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] border border-border md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Tutup menu" : "Buka menu"}
+            aria-label={open ? t("nav.closeMenu") : t("nav.openMenu")}
             onClick={() => setOpen((v) => !v)}
           >
-            <span className="sr-only">Menu</span>
+            <span className="sr-only">{t("nav.menu")}</span>
             <span aria-hidden className="text-lg leading-none">
               {open ? "×" : "☰"}
             </span>
@@ -104,7 +103,7 @@ export function Navbar() {
           className="fixed inset-0 top-14 z-40 bg-background md:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label="Menu navigasi"
+          aria-label={t("nav.ariaMobile")}
         >
           <ul className="flex h-full flex-col gap-2 px-5 py-8">
             {NAV.map((item) => (
@@ -113,15 +112,10 @@ export function Navbar() {
                   href={item.href}
                   className="block font-serif text-3xl text-foreground"
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               </li>
             ))}
-            <li className="pt-6">
-              <Link href="/admin/" className="text-sm uppercase tracking-wider text-muted">
-                Admin
-              </Link>
-            </li>
           </ul>
         </div>
       ) : null}

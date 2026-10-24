@@ -44,11 +44,11 @@ export function YearlyProofForm({
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) {
-      push("Judul wajib", "error");
+      push("Title is required", "error");
       return;
     }
     if (missingAlt) {
-      push("Semua gambar wajib punya alt text", "error");
+      push("Every image needs alt text", "error");
       return;
     }
     setSaving(true);
@@ -64,14 +64,14 @@ export function YearlyProofForm({
       };
       if (mode === "create") {
         await yearlyProofsRepo.create(payload);
-        push("Yearly proof dibuat", "success");
+        push("Yearly proof created", "success");
       } else if (initial) {
         await yearlyProofsRepo.update(initial.id, payload);
-        push("Yearly proof disimpan", "success");
+        push("Yearly proof saved", "success");
       }
       router.push("/admin/yearly-proofs/");
     } catch (err) {
-      push(err instanceof Error ? err.message : "Gagal menyimpan", "error");
+      push(err instanceof Error ? err.message : "Save failed", "error");
     } finally {
       setSaving(false);
     }
@@ -81,7 +81,7 @@ export function YearlyProofForm({
     <form onSubmit={onSubmit} className="mx-auto max-w-3xl space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm">
-          <span className="text-muted">Tahun</span>
+          <span className="text-muted">Year</span>
           <input
             type="number"
             className={field}
@@ -91,7 +91,7 @@ export function YearlyProofForm({
           />
         </label>
         <label className="block text-sm">
-          <span className="text-muted">Judul</span>
+          <span className="text-muted">Title</span>
           <input
             className={field}
             value={title}
@@ -101,7 +101,7 @@ export function YearlyProofForm({
         </label>
       </div>
       <label className="block text-sm">
-        <span className="text-muted">Deskripsi karya digital</span>
+        <span className="text-muted">Digital work description</span>
         <textarea
           className={field}
           rows={4}
@@ -111,7 +111,7 @@ export function YearlyProofForm({
         />
       </label>
       <label className="block text-sm">
-        <span className="text-muted">Deskripsi karya cetak</span>
+        <span className="text-muted">Print work description</span>
         <textarea
           className={field}
           rows={4}
@@ -121,7 +121,7 @@ export function YearlyProofForm({
         />
       </label>
       <div className="text-sm">
-        <span className="text-muted">Gambar (digital & print)</span>
+        <span className="text-muted">Images (digital & print)</span>
         <div className="mt-2">
           <ImageUploader
             images={images}
@@ -146,10 +146,10 @@ export function YearlyProofForm({
       </div>
       <div className="flex flex-wrap gap-2">
         <Button type="submit" disabled={saving}>
-          {saving ? "Menyimpan…" : "Simpan"}
+          {saving ? "Saving…" : "Save"}
         </Button>
         <Button variant="secondary" href="/admin/yearly-proofs/">
-          Batal
+          Cancel
         </Button>
       </div>
     </form>

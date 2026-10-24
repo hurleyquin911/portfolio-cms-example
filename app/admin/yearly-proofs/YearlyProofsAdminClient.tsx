@@ -31,7 +31,7 @@ export function YearlyProofsAdminClient() {
     await yearlyProofsRepo.remove(deleteId);
     setDeleteId(null);
     await load();
-    push("Yearly proof dihapus", "success");
+    push("Yearly proof deleted", "success");
   }
 
   if (!items) {
@@ -45,19 +45,19 @@ export function YearlyProofsAdminClient() {
   return (
     <AdminPage
       title="Yearly Proofs"
-      description="Arsip tahunan + PDF di IndexedDB."
+      description="Yearly archive + PDFs in IndexedDB."
       actions={
         <Button href="/admin/yearly-proofs/new/" size="sm">
-          + Baru
+          + New
         </Button>
       }
     >
       {items.length === 0 ? (
         <EmptyState
-          title="Belum ada yearly proof"
+          title="No yearly proofs yet"
           action={
             <Button href="/admin/yearly-proofs/new/" size="sm">
-              Buat
+              Create
             </Button>
           }
         />
@@ -75,8 +75,8 @@ export function YearlyProofsAdminClient() {
                   {item.pdf
                     ? item.pdf.fileName
                     : item.publicPdfPath
-                      ? "PDF seed"
-                      : "Tanpa PDF"}
+                      ? "Seed PDF"
+                      : "No PDF"}
                 </p>
               </div>
               <div className="flex gap-3 text-xs">
@@ -91,7 +91,7 @@ export function YearlyProofsAdminClient() {
                   className="text-danger"
                   onClick={() => setDeleteId(item.id)}
                 >
-                  Hapus
+                  Delete
                 </button>
               </div>
             </li>
@@ -101,7 +101,7 @@ export function YearlyProofsAdminClient() {
 
       <ConfirmDialog
         open={Boolean(deleteId)}
-        title="Hapus yearly proof?"
+        title="Delete yearly proof?"
         onCancel={() => setDeleteId(null)}
         onConfirm={() => void onDelete()}
       />

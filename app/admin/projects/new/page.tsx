@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Admin · New Project" };
 
 export default function AdminNewProjectPage() {
   return (
-    <AdminPage title="Buat proyek" description="Form create dengan Tiptap & upload gambar.">
+    <AdminPage title="Create project" description="Create form with Tiptap and image upload.">
       <ProjectForm mode="create" />
     </AdminPage>
   );

@@ -56,7 +56,7 @@ export const projectsRepo: Repository<Project> & {
   async update(id, patch) {
     const all = load();
     const idx = all.findIndex((p) => p.id === id);
-    if (idx === -1) throw new Error(`Project ${id} tidak ditemukan`);
+    if (idx === -1) throw new Error(`Project ${id} not found`);
     const updated: Project = {
       ...all[idx],
       ...patch,
@@ -74,7 +74,7 @@ export const projectsRepo: Repository<Project> & {
 
   async duplicate(id) {
     const source = await this.getById(id);
-    if (!source) throw new Error(`Project ${id} tidak ditemukan`);
+    if (!source) throw new Error(`Project ${id} not found`);
     const slugBase = `${source.slug}-copy`;
     return this.create({
       ...source,

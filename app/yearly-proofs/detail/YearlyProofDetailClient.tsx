@@ -3,12 +3,14 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SmartImage } from "@/components/media/SmartImage";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useT } from "@/hooks/useT";
+import { localizeYearlyProof } from "@/lib/i18n/localize";
 import { yearlyProofsRepo } from "@/lib/repositories";
 import { ensureSeedData } from "@/lib/seed/bootstrap";
 import type { YearlyProof } from "@/lib/types";
@@ -17,35 +19,46 @@ const PdfViewer = dynamic(
   () => import("@/components/yearly/PdfViewer").then((m) => m.PdfViewer),
   {
     ssr: false,
-    loading: () => (
-      <p className="text-sm text-muted" aria-busy>
-        Memuat PDF viewer…
-      </p>
-    ),
+    loading: () => <PdfLoading />,
   },
 );
+
+function PdfLoading() {
+  const { t } = useT();
+  return (
+    <p className="text-sm text-muted" aria-busy>
+      {t("yearly.pdfLoading")}
+    </p>
+  );
+}
 
 export function YearlyProofDetailClient() {
   const searchParams = useSearchParams();
   const yearRaw = searchParams.get("year") ?? "";
   const year = Number(yearRaw);
-  const [proof, setProof] = useState<YearlyProof | null | undefined>(undefined);
+  const [raw, setRaw] = useState<YearlyProof | null | undefined>(undefined);
+  const { t, locale } = useT();
 
   useEffect(() => {
     ensureSeedData();
     let cancelled = false;
     (async () => {
       if (!Number.isFinite(year) || yearRaw === "") {
-        setProof(null);
+        setRaw(null);
         return;
       }
       const found = await yearlyProofsRepo.getByYear(year);
-      if (!cancelled) setProof(found ?? null);
+      if (!cancelled) setRaw(found ?? null);
     })();
     return () => {
       cancelled = true;
     };
   }, [year, yearRaw]);
+
+  const proof = useMemo(
+    () => (raw ? localizeYearlyProof(raw, locale) : raw),
+    [raw, locale],
+  );
 
   useDocumentMeta(
     proof ? `${proof.title} · Neodeeps` : undefined,
@@ -66,12 +79,12 @@ export function YearlyProofDetailClient() {
     return (
       <main className="flex-1 py-16">
         <Container>
-          <h1 className="font-serif text-4xl">Yearly proof tidak ditemukan</h1>
+          <h1 className="font-serif text-4xl">{t("yearly.notFound")}</h1>
           <Link
             href="/yearly-proofs/"
             className="mt-6 inline-block text-sm underline underline-offset-4"
           >
-            Kembali ke daftar
+            {t("yearly.backToList")}
           </Link>
         </Container>
       </main>
@@ -89,7 +102,7 @@ export function YearlyProofDetailClient() {
     <main className="flex-1">
       <Container className="py-12 sm:py-16">
         <p className="text-xs uppercase tracking-[0.2em] text-muted">
-          Year {proof.year}
+          {t("yearly.yearLabel", { year: proof.year })}
         </p>
         <h1 className="mt-3 font-serif text-4xl sm:text-6xl">{proof.title}</h1>
       </Container>
@@ -98,7 +111,7 @@ export function YearlyProofDetailClient() {
         <Container>
           <Reveal>
             <h2 id="digital-h" className="font-serif text-3xl">
-              Karya digital
+              {t("yearly.digitalWork")}
             </h2>
             <p className="mt-4 max-w-2xl text-muted leading-relaxed">
               {proof.digitalDescription}
@@ -118,7 +131,7 @@ export function YearlyProofDetailClient() {
         <Container>
           <Reveal>
             <h2 id="print-h" className="font-serif text-3xl">
-              Karya cetak
+              {t("yearly.printWork")}
             </h2>
             <p className="mt-4 max-w-2xl text-muted leading-relaxed">
               {proof.printDescription}
@@ -137,7 +150,7 @@ export function YearlyProofDetailClient() {
       <section className="border-t border-border py-14" aria-labelledby="pdf-h">
         <Container>
           <h2 id="pdf-h" className="font-serif text-3xl">
-            PDF Proof
+            {t("yearly.pdfProof")}
           </h2>
           <div className="mt-8">
             <PdfViewer proof={proof} />

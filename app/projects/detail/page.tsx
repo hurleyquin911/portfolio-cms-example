@@ -6,14 +6,14 @@ import { ProjectDetailClient } from "./ProjectDetailClient";
 
 export const metadata: Metadata = {
   title: "Project Detail",
-  description: "Detail proyek portfolio.",
+  description: "Portfolio project detail.",
 };
 
 export default function ProjectDetailPage() {
   return (
     <Suspense
       fallback={
-        <PhaseShell title="Memuat proyek…">
+        <PhaseShell title="Loading project…">
           <PageSkeleton />
         </PhaseShell>
       }

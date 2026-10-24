@@ -14,7 +14,7 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function PageSkeleton() {
   return (
-    <div className="space-y-6 py-16" aria-busy aria-label="Memuat konten">
+    <div className="space-y-6 py-16" aria-busy aria-label="Loading content">
       <Skeleton className="h-10 w-2/3 max-w-md" />
       <Skeleton className="h-4 w-full max-w-xl" />
       <Skeleton className="h-4 w-5/6 max-w-lg" />

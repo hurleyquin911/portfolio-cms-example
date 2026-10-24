@@ -1,17 +1,26 @@
 "use client";
 
+import { useMemo } from "react";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { useClientCollection } from "@/hooks/useClientCollection";
+import { useT } from "@/hooks/useT";
 import { ProfileImage } from "@/components/media/ProfileImage";
 import { PersonJsonLd } from "@/components/seo/JsonLd";
+import { localizeSettings } from "@/lib/i18n/localize";
 import { settingsRepo } from "@/lib/repositories";
 
 export function AboutContent() {
-  const { data: settings, loading } = useClientCollection(
+  const { t, locale } = useT();
+  const { data: rawSettings, loading } = useClientCollection(
     () => settingsRepo.get(),
     [],
+  );
+
+  const settings = useMemo(
+    () => (rawSettings ? localizeSettings(rawSettings, locale) : null),
+    [rawSettings, locale],
   );
 
   if (loading || !settings) {
@@ -35,7 +44,7 @@ export function AboutContent() {
             <ProfileImage
               publicSrc={settings.profileImagePublicSrc}
               fileId={settings.profileImageFileId}
-              alt={`Foto profil ${settings.heroName}`}
+              alt={t("about.profileAlt", { name: settings.heroName })}
               width={1000}
               height={1250}
             />
@@ -44,7 +53,9 @@ export function AboutContent() {
 
         <div>
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted">About</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-muted">
+              {t("about.eyebrow")}
+            </p>
             <h1 className="mt-3 font-serif text-5xl sm:text-6xl">
               {settings.heroName}
             </h1>
@@ -55,7 +66,7 @@ export function AboutContent() {
 
           <Reveal className="mt-12" as="section">
             <h2 className="text-xs uppercase tracking-[0.2em] text-muted">
-              Timeline
+              {t("about.timeline")}
             </h2>
             <ol className="mt-6 space-y-6 border-l border-border pl-6">
               {settings.timeline.map((item) => (
@@ -75,13 +86,13 @@ export function AboutContent() {
         <Container>
           <Reveal>
             <h2 id="skills-h" className="font-serif text-3xl">
-              Skills & Tools
+              {t("about.skillsTools")}
             </h2>
           </Reveal>
           <div className="mt-10 grid gap-10 sm:grid-cols-2">
             <Reveal>
               <h3 className="text-xs uppercase tracking-[0.2em] text-muted">
-                Skills
+                {t("about.skills")}
               </h3>
               <ul className="mt-4 space-y-2">
                 {settings.skills.map((s) => (
@@ -93,15 +104,15 @@ export function AboutContent() {
             </Reveal>
             <Reveal delay={0.08}>
               <h3 className="text-xs uppercase tracking-[0.2em] text-muted">
-                Tools
+                {t("about.tools")}
               </h3>
               <ul className="mt-4 flex flex-wrap gap-2">
-                {settings.tools.map((t) => (
+                {settings.tools.map((tool) => (
                   <li
-                    key={t}
+                    key={tool}
                     className="border border-border px-3 py-1.5 text-sm text-muted"
                   >
-                    {t}
+                    {tool}
                   </li>
                 ))}
               </ul>

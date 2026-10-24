@@ -43,7 +43,7 @@ export function ImageUploader({
         const next = [...(images as YearlyProofImage[])];
         for (const file of Array.from(fileList)) {
           if (!file.type.startsWith("image/")) {
-            push(`${file.name} bukan gambar`, "error");
+            push(`${file.name} is not an image`, "error");
             continue;
           }
           const alt = file.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
@@ -56,7 +56,7 @@ export function ImageUploader({
         const next = [...(images as ProjectImage[])];
         for (const file of Array.from(fileList)) {
           if (!file.type.startsWith("image/")) {
-            push(`${file.name} bukan gambar`, "error");
+            push(`${file.name} is not an image`, "error");
             continue;
           }
           const alt = file.name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
@@ -69,9 +69,9 @@ export function ImageUploader({
         }
         onChange(reindex(next));
       }
-      push("Gambar diproses & dikompres", "success");
+      push("Images processed and compressed", "success");
     } catch (e) {
-      push(e instanceof Error ? e.message : "Upload gagal", "error");
+      push(e instanceof Error ? e.message : "Upload failed", "error");
     } finally {
       setBusy(false);
     }
@@ -141,11 +141,11 @@ export function ImageUploader({
         )}
       >
         <p className="text-sm text-muted">
-          Drag & drop gambar, atau pilih file. Otomatis WebP + varian 400/800/1600w.
+          Drag & drop images, or choose files. Auto WebP + 400/800/1600w variants.
         </p>
         <label className="mt-4 inline-flex cursor-pointer">
           <span className="inline-flex h-9 items-center rounded-[var(--radius-md)] border border-border px-3 text-sm hover:bg-surface-2">
-            {busy ? "Memproses…" : "Pilih gambar"}
+            {busy ? "Processing…" : "Choose images"}
           </span>
           <input
             type="file"
@@ -159,7 +159,7 @@ export function ImageUploader({
       </div>
 
       {sorted.length === 0 ? (
-        <p className="text-sm text-muted">Belum ada gambar.</p>
+        <p className="text-sm text-muted">No images yet.</p>
       ) : (
         <ul className="space-y-4">
           {sorted.map((img, index) => (
@@ -180,7 +180,7 @@ export function ImageUploader({
               />
               <div className="space-y-2">
                 <label className="block text-xs text-muted">
-                  Alt text (wajib)
+                  Alt text (required)
                   <input
                     value={img.alt}
                     onChange={(e) => updateAt(img.id, { alt: e.target.value })}
@@ -191,7 +191,7 @@ export function ImageUploader({
                 <p className="text-xs text-muted">
                   {formatBytes(img.originalSizeBytes)} →{" "}
                   {formatBytes(img.compressedSizeBytes)}
-                  {img.publicSrc ? " · seed publik" : ""}
+                  {img.publicSrc ? " · public seed" : ""}
                 </p>
                 {mode === "project" ? (
                   <label className="inline-flex items-center gap-2 text-xs">
@@ -201,11 +201,11 @@ export function ImageUploader({
                       checked={"isCover" in img && img.isCover}
                       onChange={() => setCover(img.id)}
                     />
-                    Jadikan cover
+                    Set as cover
                   </label>
                 ) : (
                   <label className="block text-xs text-muted">
-                    Kategori
+                    Category
                     <select
                       value={
                         "category" in img ? img.category : proofCategory
@@ -231,7 +231,7 @@ export function ImageUploader({
                   size="sm"
                   onClick={() => remove(img.id)}
                 >
-                  Hapus
+                  Delete
                 </Button>
               </div>
             </li>

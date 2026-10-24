@@ -28,7 +28,7 @@ export function MessagesAdminClient() {
   async function toggleRead(msg: ContactMessage) {
     await messagesRepo.markRead(msg.id, !msg.read);
     await load();
-    push(msg.read ? "Ditandai belum dibaca" : "Ditandai dibaca", "info");
+    push(msg.read ? "Marked as unread" : "Marked as read", "info");
   }
 
   async function onDelete() {
@@ -36,7 +36,7 @@ export function MessagesAdminClient() {
     await messagesRepo.remove(deleteId);
     setDeleteId(null);
     await load();
-    push("Pesan dihapus", "success");
+    push("Message deleted", "success");
   }
 
   if (!items) {
@@ -50,12 +50,12 @@ export function MessagesAdminClient() {
   return (
     <AdminPage
       title="Messages"
-      description="Inbox dari form kontak (localStorage)."
+      description="Inbox from the contact form (localStorage)."
     >
       {items.length === 0 ? (
         <EmptyState
-          title="Kotak masuk kosong"
-          description="Pesan dari /contact akan muncul di sini."
+          title="Inbox is empty"
+          description="Messages from /contact will show up here."
         />
       ) : (
         <ul className="space-y-3">
@@ -73,7 +73,7 @@ export function MessagesAdminClient() {
                     {msg.subject}
                     {!msg.read ? (
                       <span className="ml-2 text-[10px] uppercase tracking-wider text-accent">
-                        baru
+                        new
                       </span>
                     ) : null}
                   </p>
@@ -84,7 +84,7 @@ export function MessagesAdminClient() {
                     </a>
                   </p>
                   <p className="mt-1 text-xs text-muted">
-                    {new Date(msg.createdAt).toLocaleString("id-ID")}
+                    {new Date(msg.createdAt).toLocaleString("en-US")}
                   </p>
                 </div>
                 <div className="flex gap-2 text-xs">
@@ -93,14 +93,14 @@ export function MessagesAdminClient() {
                     className="underline underline-offset-2"
                     onClick={() => void toggleRead(msg)}
                   >
-                    {msg.read ? "Belum dibaca" : "Tandai dibaca"}
+                    {msg.read ? "Mark unread" : "Mark as read"}
                   </button>
                   <button
                     type="button"
                     className="text-danger"
                     onClick={() => setDeleteId(msg.id)}
                   >
-                    Hapus
+                    Delete
                   </button>
                 </div>
               </div>
@@ -114,7 +114,7 @@ export function MessagesAdminClient() {
 
       <ConfirmDialog
         open={Boolean(deleteId)}
-        title="Hapus pesan?"
+        title="Delete message?"
         onCancel={() => setDeleteId(null)}
         onConfirm={() => void onDelete()}
       />
