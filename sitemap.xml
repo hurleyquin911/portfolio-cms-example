@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:3000/</loc>
+<lastmod>2026-10-24T09:08:32.315Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>1</priority>
+</url>
+<url>
+<loc>http://localhost:3000/projects/</loc>
+<lastmod>2026-10-24T09:08:32.315Z</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>http://localhost:3000/yearly-proofs/</loc>
+<lastmod>2026-10-24T09:08:32.315Z</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>http://localhost:3000/about/</loc>
+<lastmod>2026-10-24T09:08:32.315Z</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>http://localhost:3000/contact/</loc>
+<lastmod>2026-10-24T09:08:32.315Z</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.7</priority>
+</url>
+</urlset>
