@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d out -t --nojekyll --cname brickforge.neodeeps.com",
+    "deploy": "gh-pages -d out -t --nojekyll --cname examplecms.neodeeps.com",
     "lint": "eslint",
     "export:check": "next build"
   },
